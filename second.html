@@ -1,0 +1,174 @@
+
+<html>
+<head>
+  <title>Weather</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" ></script>
+  <link href="https://fonts.googleapis.com/css?family=Handlee&display=swap" rel="stylesheet">
+</head>
+<style>
+    body{
+        background: linear-gradient(#25364f, #4d71a5, #9bc4ff);
+        background-size: cover;
+        background-attachment: fixed;
+    } 
+     .circle{
+        width: 20px;
+        height: 20px;
+        border: 1px solid #000;
+        position: absolute;
+        border-radius: 15px;
+    }  
+    .weahter{
+        font-size: 50px;
+    }
+    .ShowWeather{
+        margin-top: 150px;
+        font-family: 'Handlee', cursive;
+        color: white;
+        font-size: 70px;
+        
+    }
+    h1{
+        font-family: 'Handlee', cursive;
+        color: white;
+    
+        font-size: 20px;
+        text-align: center;
+        
+    }
+    .container{
+        margin-top: 100px;
+        
+    }
+     button{
+          position: absolute;
+          top: 22%;
+    
+          transform: translate(-50%, -50%);
+      }
+      button{
+          background: none;
+          color: #ccc;
+          width: 180px;
+          height: 40px;
+          border: 1px solid black;
+          font-size: 18px;
+          border-radius: 4px;
+          transition: .6s;
+          overflow: hidden;
+      }
+      button:focus{
+          outline: none;
+      }
+      button:before{
+          content: '';
+          display:block;
+          position: absolute;
+          background: rgba(255,255,255,.5);
+          width: 60px;
+          height: 100%;
+          left: 0;
+          top: 0;
+          opacity: .5;
+          filter: blur(30px);
+          transform: translateX(-130px) skewX(-15deg);
+          
+      }
+      button:after{
+          content: '';
+          display: block;
+          position: absolute;
+          background: rgba(255,255,255,.2);
+          width: 30px;
+          height: 100%;
+          left: 30px;
+          top: 0;
+          opacity: 0;
+          filter: blur(30px);
+          transform: translate(-100px) scaleX(-15deg);
+      }
+      button:hover{
+          background: black;
+          cursor: pointer;
+      }
+      button:hover:before{
+          transform: translateX(300px) skewX(-15deg);
+          opacity: .6;
+          transition: .7s;
+          
+      }
+      button:hover:after{
+          transform: translateX(300px) skewX(-15deg);
+          opacity: .6;
+          transition: .7s;
+      }
+    
+</style>
+<body>
+   <div class="container">
+  <h1>Type your city</h1>
+  <center><input id="city"></center>
+   <center><button id="weather">Weather Updates</button></center>
+       </div>
+  <center><div class="ShowWeather"></div></center>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      
+      $("#weather").click(function(){
+                
+            var city = $("#city").val();
+            var key  = 'a4bfa97ce4fc93ce252d380ffac68887';
+            
+            $.ajax({
+              url:'http://api.openweathermap.org/data/2.5/weather',
+              dataType:'json',
+              type:'GET',
+              data:{q:city, appid: key, units: 'metric'},
+
+              success: function(data){
+                var wf = '';
+                $.each(data.weather, function(index, val){
+
+                  wf += '<p><b>' + data.name + "</b>" + "</p>"+ data.main.temp + '&deg;C ' + 
+                  ' | ' + val.main + ", " + val.description 
+
+                });
+              
+               $(".ShowWeather").html(wf);
+              }
+
+            })
+
+      });
+    });
+      
+      document.onmousemove = animateCircles;
+    var colors = ['#CCFFFF', '#66b2ff' , '#00cccc'];
+    
+function animateCircles (event){
+    var circle = document.createElement("div");
+    circle.setAttribute("class", "circle");
+    document.body.appendChild(circle);
+    
+    
+    circle.style.left = event.clientX + 'px';
+    circle.style.top = event.clientY + 'px';
+    
+    var color = colors [Math.floor(Math.random () * colors.length)];
+    circle.style.borderColor = color;
+    
+    circle.style.transition = "all 0.5s linear 0s";
+    circle.style.left = circle.offsetLeft - 20 + 'px';
+    circle.style.top = circle.offsetLeft - 20 + 'px';
+    circle.style.width = "50px";
+    circle.style.height= "50px";
+    circle.style.borderWidth = "5px";
+    circle.style.opacity = 0;
+
+    
+}
+  </script>
+
+</body>
+</html>
